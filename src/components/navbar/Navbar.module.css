@@ -1,0 +1,10 @@
+.navbar {
+    width: 100px;
+    margin-right: 100px;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #000;
+}
+
