@@ -1,0 +1,15 @@
+const Filter = ({doFilter, changeFilterValue, filterValue}) => {
+
+    return (
+        <div className={style.filter}>
+            <input type="text" value={filterValue} onChange={(e) =>
+                {
+                     changeFilterValue(e.target.value);
+                     doFilter(e.target.value);
+                }
+            }/>
+        </div>
+    )
+}
+
+export default Filter;

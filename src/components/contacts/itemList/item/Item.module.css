@@ -1,0 +1,23 @@
+import PropTypes from "prop-types";
+
+const Item = ({number, name}) => {
+    return (
+        <div>
+            <div>
+                <div>
+                    {name}
+                </div>
+                <div>
+                    {number}
+                </div>
+            </div>
+        </div>
+    )
+}
+
+Item.propTypes = {
+    number: PropTypes.string,
+    name: PropTypes.string
+}
+
+export default Item;
