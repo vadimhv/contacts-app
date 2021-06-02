@@ -3,12 +3,12 @@ import ItemList from "./itemList/ItemList";
 import style from './Contacts.module.css'
 import PropTypes from "prop-types";
 
-const Contacts = ({contactList, doFilter, changeFilterValue, filterValue, deleteContact, editContact, doChangeName}) => {
+const Contacts = ({contactList, doFilter, changeFilterValue, filterValue, deleteContact, editContact, doChangeName, loading}) => {
     return (
         <div className={style.contacts}>
             <h1>Contacts</h1>
             <Filter doFilter={doFilter} changeFilterValue={changeFilterValue} filterValue={filterValue}/>
-            <ItemList contactList={contactList} deleteContact={deleteContact} editContact={editContact} doChangeName={doChangeName}/>
+            <ItemList contactList={contactList} deleteContact={deleteContact} editContact={editContact} doChangeName={doChangeName} loading={loading}/>
         </div>
     )
 }

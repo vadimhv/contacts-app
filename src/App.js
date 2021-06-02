@@ -9,10 +9,21 @@ import {useState} from "react";
 function App() {
     const [searchResult, setSearchResult] = useState([]);
     const [filterValue, changeFilterValue] = useState('');
-    const [contactList, setContactList] = useState([
-        {id: 1, number: '+3805957465', name: 'User1'},
-        {id: 2, number: '+3809215421', name: 'User2'}
-    ]);
+    const [contactList, setContactList] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const getData = () => {
+            setContactList([
+                {id: 1, number: '+3805957465', name: 'User1'},
+                {id: 2, number: '+3809215421', name: 'User2'}
+            ])
+    }
+
+    // fake API
+    setTimeout(() => {
+        setLoading(false);
+        getData();
+    }, 3000);
 
     const addToContact = (data) => {
         const body = {
@@ -58,7 +69,7 @@ function App() {
                     <Route render={() => <Contacts contactList={filterValue.length < 1 ? contactList : searchResult}
                                                    doFilter={doFilter} changeFilterValue={changeFilterValue}
                                                    filterValue={filterValue} deleteContact={deleteContact}
-                                                   doChangeName={doChangeName}/>} path={'/contacts/'}/>
+                                                   doChangeName={doChangeName} loading={loading}/>} path={'/contacts/'}/>
                 </div>
             </BrowserRouter>
         </div>
