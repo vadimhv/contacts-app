@@ -3,35 +3,66 @@ import Add from "./components/add/Add";
 import Contacts from "./components/contacts/Contacts";
 import Navbar from "./components/navbar/Navbar";
 import {BrowserRouter} from "react-router-dom";
-import { Route } from "react-router";
+import {Route} from "react-router";
 import {useState} from "react";
 
 function App() {
-    const [contactList, changeContactList] = useState([
-        {id: 1, number: '3809997465', name: 'Sasha'},
-        {id: 2, number: '3809997465', name: 'Vadym'}
+    const [searchResult, setSearchResult] = useState([]);
+    const [filterValue, changeFilterValue] = useState('');
+    const [contactList, setContactList] = useState([
+        {id: 1, number: '+3805957465', name: 'User1'},
+        {id: 2, number: '+3809215421', name: 'User2'}
     ]);
 
-    const addNameToContact = (data) => {
+    const addToContact = (data) => {
         const body = {
             id: contactList.length + 1,
             number: data.number,
             name: data.name
         }
-        changeContactList([...contactList, body])
+        setContactList([...contactList, body]);
     }
 
-  return (
-      <div className="App">
-        <BrowserRouter>
-                <Navbar />
+    const doFilter = (text) => {
+        if (text !== '') {
+            const newContactList = contactList.filter(c => {
+                return c.number.includes(text) || c.name.toLowerCase().includes(text.toLowerCase());
+            });
+            setSearchResult(newContactList);
+        } else {
+            setSearchResult(contactList);
+        }
+    }
+
+    const deleteContact = (id) => {
+        setContactList(contactList.filter(c => c.id !== id));
+    }
+
+    const doChangeName = (id, name, number) => {
+        setContactList(contactList.filter(c => {
+            if (c.id === id) {
+                c.name = name;
+                c.number = number;
+            }
+            return c;
+        }));
+    }
+
+    return (
+        <div className="App">
+            <BrowserRouter>
                 <div className="AppContent">
-                    <Route render={() => <Add />} path={'/add/'} addNameToContact={addNameToContact} />
-                    <Route render={() => <Contacts contactList={contactList}/>} path={'/contacts/'} />
+                    <Navbar/>
+                    <Route render={() => <Add addNameToContact={addToContact}/>} path={'/add/'}/>
+
+                    <Route render={() => <Contacts contactList={filterValue.length < 1 ? contactList : searchResult}
+                                                   doFilter={doFilter} changeFilterValue={changeFilterValue}
+                                                   filterValue={filterValue} deleteContact={deleteContact}
+                                                   doChangeName={doChangeName}/>} path={'/contacts/'}/>
                 </div>
-        </BrowserRouter>
-      </div>
-  );
+            </BrowserRouter>
+        </div>
+    );
 }
 
 export default App;

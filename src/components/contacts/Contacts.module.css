@@ -1,14 +1,3 @@
-import Filter from "./filter/Filter";
-import ItemList from "./itemList/ItemList";
-
-const Contacts = ({contactList, doFilter, changeFilterValue, filterValue}) => {
-    return (
-        <div>
-            <h1>Contacts</h1>
-            <Filter doFilter={doFilter} changeFilterValue={changeFilterValue} filterValue={filterValue}/>
-            <ItemList contactList={contactList}/>
-        </div>
-    )
+.contacts {
+    margin-top: 30px;
 }
-
-export default Contacts;

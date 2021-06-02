@@ -1,80 +1,39 @@
-import {useState} from "react";
-import PropTypes from "prop-types";
-
-const Add = ({addNameToContact}) => {
-    const [name, changeName] = useState('');
-    const [number, changeNumber] = useState('');
-    const [errorName, changeErrorName] = useState(false);
-    const [errorNumber, changeErrorNumber] = useState(false);
-    const [success, changeSuccess] = useState(false);
-
-    const submitAddingContact = (e) => {
-        e.preventDefault();
-        if (name.length === 0 && number.length === 0) {
-            changeErrorName(true);
-            changeErrorNumber(true);
-        }else if (name.length === 0) {
-            changeErrorName(true);
-        }else if (number.length === 0) {
-            changeErrorNumber(true);
-        }else if (!(name >= 'a' && name <= 'z') && !(name >= 'A' && name <= 'Z')) {
-            changeErrorName(true);
-        } else if (number.length !== 12){
-            changeErrorNumber(true);
-        }else {
-            changeSuccess(true);
-            changeErrorName(false);
-            changeErrorNumber(false);
-            addNameToContact({name, number});
-            changeName('');
-            changeNumber('');
-        }
-    }
-
-
-    return (
-        <div>
-            <h1>
-                Add a contact
-            </h1>
-            <form onSubmit={submitAddingContact}>
-                <div>
-                    <input type="name" placeholder='Name' value={name} onChange={(e) =>
-                    {
-                        changeErrorName(false)
-                        changeName(e.target.value);
-                        changeSuccess(false);
-                    }
-                    }/>
-                </div>
-                {
-                    errorName ? <div>error with name</div> : null
-                }
-                <div>
-                    <input type="tel" placeholder='Number' value={number} onChange={(e) =>
-                    {
-                        changeErrorNumber(false);
-                        changeNumber(e.target.value);
-                        changeSuccess(false);
-                    }}/>
-                </div>
-                {
-                    errorNumber ? <div>error with number</div> : null
-                }
-                {
-                    success ? <div>Contact was added</div> : null
-                }
-                <div>
-                    <button type='submit'>Add</button>
-                </div>
-            </form>
-        </div>
-    )
+.add {
+    margin-top: 30px;
 }
 
-Add.propTypes = {
-    name: PropTypes.string,
-    number: PropTypes.number
+.input {
+    width: 220px;
+    height: 30px;
+    padding: 0 10px;
+    margin-bottom: 10px;
 }
 
-export default Add;
+.error {
+    color: red;
+    font-size: 10px;
+    margin-top: -5px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.success {
+    color: #077107;
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
+button {
+    width: 240px;
+    margin: 10px 0;
+    background: transparent;
+    border: 1px solid #555555;
+    padding: 10px 40px;
+    cursor: pointer;
+    transition: 1s;
+}
+
+button:hover {
+    background: #000;
+    color: #fff;
+}
