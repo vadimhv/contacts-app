@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 import style from './Add.module.css';
 import Message from '../common/message/Message'
 import InputAdd from "../common/inputAdd/InputAdd";
+import Loader from "../common/loader/Loader";
 
-const Add = ({addNameToContact}) => {
+const Add = ({addNameToContact, loading}) => {
     const [name, changeName] = useState('');
     const [number, changeNumber] = useState('');
     const [errorName, changeErrorName] = useState(false);
@@ -13,7 +14,7 @@ const Add = ({addNameToContact}) => {
 
     const numberValidation = () => {
         const num = /\+[0-9]{12}/;
-        if (!num.test(String(number)) || number.length < 1) {
+        if (!num.test(String(number)) || number.length < 11 || number.length > 14) {
             changeErrorNumber(true);
             changeSuccess(false);
             return false
@@ -46,7 +47,7 @@ const Add = ({addNameToContact}) => {
         numberValidation(e);
         nameValidation();
 
-        if(numberValidation() && nameValidation()) {
+        if (numberValidation() && nameValidation()) {
             addContact();
         }
     }
@@ -56,23 +57,27 @@ const Add = ({addNameToContact}) => {
             <h1>
                 Add a contact
             </h1>
-            <form onSubmit={submitAddingContact}>
-                <InputAdd type={'name'} placeholder={'Name'}
-                              value={name} func={(e) => [changeErrorName(), changeName(e.target.value)]} validation={nameValidation} />
+            {
+                loading ? <Loader/> : <form onSubmit={submitAddingContact}>
+                    <InputAdd type={'name'} placeholder={'Name'}
+                              value={name} func={(e) => [changeErrorName(), changeName(e.target.value)]}
+                              validation={nameValidation}/>
 
-                <Message message={errorName} text={'Troubles with name'} className={style.error}/>
+                    <Message message={errorName} text={'Troubles with name'} className={style.error}/>
 
-                <InputAdd type={'tel'} placeholder={'Phone: +38'}
-                          value={number} func={(e) => [changeErrorNumber(), changeNumber(e.target.value)]} validation={numberValidation}/>
+                    <InputAdd type={'tel'} placeholder={'Phone: +38'}
+                              value={number} func={(e) => [changeErrorNumber(), changeNumber(e.target.value)]}
+                              validation={numberValidation}/>
 
-                <Message message={errorNumber} text={'Bad format of the number'} className={style.error}/>
+                    <Message message={errorNumber} text={'Bad format of the number'} className={style.error}/>
 
-                <div>
-                    <button type='submit'>Add</button>
-                </div>
+                    <div>
+                        <button type='submit'>Add</button>
+                    </div>
 
-                <Message message={success} text={'Contact was added'} className={style.success}/>
-            </form>
+                    <Message message={success} text={'Contact was added'} className={style.success}/>
+                </form>
+            }
         </div>
     )
 }
