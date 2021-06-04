@@ -3,17 +3,18 @@ import PropTypes from "prop-types";
 import style from './ItemList.module.css'
 import Loader from "../../common/loader/Loader";
 
-const ItemList = ({contactList, deleteContact, editContact, doChangeName, loading}) => {
+const ItemList = ({contactList, deleteContact, editContact, doChangeName, loading, numberValidation, acceptNumberValidation}) => {
 
     return (
         <div>
             {
                 loading
-                    ? <Loader />
+                    ? <Loader/>
                     : contactList.length !== 0 ? contactList.map(c => {
-                            return <Item key={c.id} id={c.id} number={c.number} name={c.name} deleteContact={deleteContact}
-                                         editContact={editContact} doChangeName={doChangeName}/>
-                        }) : <p className={style.noContacts}>No contacts</p>
+                        return <Item key={c.id} id={c.id} number={c.number} name={c.name} deleteContact={deleteContact}
+                                     editContact={editContact} doChangeName={doChangeName}
+                                     numberValidation={numberValidation} acceptNumberValidation={acceptNumberValidation}/>
+                    }) : <p className={style.noContacts}>No contacts</p>
             }
         </div>
     )

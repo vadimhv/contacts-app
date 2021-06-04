@@ -5,30 +5,24 @@ import edit from '../../../../img/edit.svg';
 import {useState} from "react";
 import Message from "../../../common/message/Message";
 
-const Item = ({id, number, name, deleteContact, doChangeName}) => {
+const Item = ({id, number, name, deleteContact, doChangeName, numberValidation, acceptNumberValidation}) => {
     const [editMode, setEditMode] = useState(false);
     const [changedName, setChangedName] = useState(name)
-    const [changedNumber, setChangedNumber] = useState(number);
+    const [changedNumber, setNumber] = useState(number);
     const [numberError, setNumberError] = useState(false);
 
-    const editContact = () => {
-        if (changedNumber[0] !== '+' || changedNumber.length < 11) {
-            setNumberError(true);
-        } else {
+    const acceptNumber = () => {
+        return !!acceptNumberValidation(changedNumber, setNumberError);
+    }
+
+    const submitChangingContact = () => {
+        acceptNumber()
+        if (acceptNumber()) {
             setEditMode(!editMode);
-            doChangeName(id, changedName, changedNumber);
+            doChangeName(id, changedName, changedNumber)
         }
     }
 
-    const numberValidation = (e) => {
-        if (!Number.isNaN(+e.target.value) || e.target.value === '+') {
-            setChangedNumber(e.target.value.slice(0, 13));
-            setNumberError(false);
-            return true;
-        } else {
-            return false;
-        }
-    }
     return (
         <div className={style.item}>
             <div>
@@ -42,7 +36,7 @@ const Item = ({id, number, name, deleteContact, doChangeName}) => {
                             }/>
                         </div>
                         <div>
-                            <input type="text" value={changedNumber} onChange={numberValidation}/>
+                            <input type="text" value={changedNumber} onChange={(e) => numberValidation(e, setNumber, setNumberError)}/>
                             {
                                 <Message message={numberError} text={'Bad format of phone number'}
                                          className={style.error}/>
@@ -60,7 +54,7 @@ const Item = ({id, number, name, deleteContact, doChangeName}) => {
                     </>}
             </div>
             <div>
-                <span onClick={editContact}><img src={edit} className={style.edit} alt=""/></span>
+                <span onClick={submitChangingContact}><img src={edit} className={style.edit} alt=""/></span>
                 <span className={style.close} onClick={() => deleteContact(id)}><img src={del} className={style.del}
                                                                                      alt=""/></span>
             </div>

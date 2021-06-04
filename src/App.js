@@ -49,17 +49,53 @@ function App() {
         }));
     }
 
+
+    // Validation
+    const numberValidation = (e, setNumber, setNumberError) => {
+        if (!Number.isNaN(+e.target.value) || e.target.value === '+') {
+            setNumber(e.target.value.slice(0, 13));
+            setNumberError(false);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    const acceptNumber = (number, numberErrorFunction) => {
+        if (number[0] !== '+' || number.length < 11) {
+            numberErrorFunction(true);
+            return false;
+        } else {
+            numberErrorFunction(false);
+            return true;
+        }
+    }
+    const acceptName = (name, errorNameFunction) => {
+        if (!(name.length > 0 && name.length <= 30)) {
+            errorNameFunction(true);
+            return false
+        } else {
+            errorNameFunction(false);
+            return true
+        }
+    }
+    //
+
     return (
         <div className="App">
             <BrowserRouter>
                 <div className="AppContent">
                     <Navbar/>
-                    <Route render={() => <Add addNameToContact={addToContact} loading={loading}/>} path={'/add/'}/>
+                    <Route render={() => <Add addNameToContact={addToContact} loading={loading}
+                                              numberValidation={numberValidation}
+                                              acceptNumberValidation={acceptNumber}
+                                              acceptNameValidation={acceptName}/>} path={'/add/'}/>
 
                     <Route render={() => <Contacts contactList={filterValue.length < 1 ? contactList : searchResult}
                                                    doFilter={doFilter} changeFilterValue={changeFilterValue}
                                                    filterValue={filterValue} deleteContact={deleteContact}
-                                                   doChangeName={doChangeName} loading={loading}/>} path={'/contacts/'}/>
+                                                   doChangeName={doChangeName} loading={loading}
+                                                   numberValidation={numberValidation}
+                                                   acceptNumberValidation={acceptNumber}/>} path={'/contacts/'}/>
                 </div>
             </BrowserRouter>
         </div>

@@ -1,9 +1,9 @@
 import style from "../../add/Add.module.css";
 
-const InputAdd = ({type, placeholder, value, func, validation}) => {
+const InputAdd = ({type, placeholder, value, functions, validation}) => {
     return (
         <div>
-            <input type={type} placeholder={placeholder} className={style.input} value={value} onChange={func} onBlur={validation} />
+            <input type={type} placeholder={placeholder} className={style.input} value={value} onChange={functions} onBlur={validation} />
         </div>
     )
 }

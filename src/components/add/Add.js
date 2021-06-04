@@ -5,49 +5,33 @@ import Message from '../common/message/Message'
 import InputAdd from "../common/inputAdd/InputAdd";
 import Loader from "../common/loader/Loader";
 
-const Add = ({addNameToContact, loading}) => {
+const Add = ({addNameToContact, loading, numberValidation, acceptNumberValidation, acceptNameValidation}) => {
     const [name, changeName] = useState('');
-    const [number, changeNumber] = useState('');
-    const [errorName, changeErrorName] = useState(false);
-    const [errorNumber, changeErrorNumber] = useState(false);
+    const [number, setNumber] = useState('');
+    const [errorName, setNameError] = useState(false);
+    const [errorNumber, setNumberError] = useState(false);
     const [success, changeSuccess] = useState(false);
 
-    const numberValidation = () => {
-        const num = /\+[0-9]{12}/;
-        if (!num.test(String(number)) || number.length < 11 || number.length > 14) {
-            changeErrorNumber(true);
-            changeSuccess(false);
-            return false
-        } else {
-            changeErrorNumber(false);
-            return true
-        }
+    const acceptNumber = () => {
+        return !!acceptNumberValidation(number, setNumberError);
     }
 
-    const nameValidation = () => {
-        if (name.length < 1 || name.length > 30) {
-            changeErrorName(true);
-            changeSuccess(false);
-            return false
-        } else {
-            changeErrorName(false);
-            return true
-        }
+    const acceptName = () => {
+        return !!acceptNameValidation(name, setNameError)
     }
 
     const addContact = () => {
         addNameToContact({name, number});
         changeSuccess(true);
         changeName('');
-        changeNumber('');
+        setNumber('');
     }
 
     const submitAddingContact = (e) => {
         e.preventDefault();
-        numberValidation(e);
-        nameValidation();
-
-        if (numberValidation() && nameValidation()) {
+        acceptNumber();
+        acceptName();
+        if (acceptName() && acceptNumber()) {
             addContact();
         }
     }
@@ -60,14 +44,15 @@ const Add = ({addNameToContact, loading}) => {
             {
                 loading ? <Loader/> : <form onSubmit={submitAddingContact}>
                     <InputAdd type={'name'} placeholder={'Name'}
-                              value={name} func={(e) => [changeErrorName(), changeName(e.target.value)]}
-                              validation={nameValidation}/>
+                              value={name} functions={(e) => [setNameError(false), changeName(e.target.value)]}
+                              validation={acceptName}/>
 
                     <Message message={errorName} text={'Troubles with name'} className={style.error}/>
 
                     <InputAdd type={'tel'} placeholder={'Phone: +38'}
-                              value={number} func={(e) => [changeErrorNumber(), changeNumber(e.target.value)]}
-                              validation={numberValidation}/>
+                              value={number}
+                              functions={(e) => [setNumberError(false), numberValidation(e, setNumber, setNumberError)]}
+                              validation={acceptNumber}/>
 
                     <Message message={errorNumber} text={'Bad format of the number'} className={style.error}/>
 
